@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Events - Charity Events</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-brand">Charity Events</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/search" class="active">Search</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>Search Events</h1>
+        <p>Find charity events by date, location, or category</p>
+    </header>
+
+    <main class="container">
+        <form id="search-form">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-6); margin-bottom: var(--space-6);">
+                <div class="form-group">
+                    <label for="date">📅 Event Date</label>
+                    <input type="date" id="date" name="date" placeholder="Select a date">
+                    <small style="color: var(--gray-500); font-size: var(--font-size-sm);">Find events on a specific date</small>
+                </div>
+                <div class="form-group">
+                    <label for="location">📍 Location</label>
+                    <input type="text" id="location" name="location" placeholder="Enter city, state, or location">
+                    <small style="color: var(--gray-500); font-size: var(--font-size-sm);">Search by location</small>
+                </div>
+                <div class="form-group">
+                    <label for="category">🏷️ Category</label>
+                    <select id="category" name="category">
+                        <option value="">-- Any category --</option>
+                    </select>
+                    <small style="color: var(--gray-500); font-size: var(--font-size-sm);">Filter by event type</small>
+                </div>
+            </div>
+            
+            <div style="background: var(--gray-50); padding: var(--space-4); border-radius: var(--border-radius-sm); margin-bottom: var(--space-6);">
+                <h4 style="margin-bottom: var(--space-3); color: var(--gray-800);">Search Tips:</h4>
+                <ul style="margin: 0; padding-left: var(--space-6); color: var(--gray-600); font-size: var(--font-size-sm);">
+                    <li>You can use any combination of filters</li>
+                    <li>Leave fields empty to include all events</li>
+                    <li>Use partial location names (e.g., "New York" or "NYC")</li>
+                </ul>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" id="clear-filters" class="btn-secondary">🗑️ Clear All Filters</button>
+                <button type="submit">🔍 Search Events</button>
+            </div>
+        </form>
+
+        <div id="results">
+            <!-- Search results will be displayed here -->
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/search.js"></script>
+</body>
+</html>
