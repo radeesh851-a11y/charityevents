@@ -1,0 +1,12 @@
+{
+  "name": "charityevents-client",
+  "version": "1.0.0",
+  "description": "Charity Events Frontend",
+  "main": "public/index.html",
+  "scripts": {
+    "start": "echo 'Frontend files are served by the API server'",
+    "build": "echo 'No build process needed for static files'"
+  },
+  "author": "",
+  "license": "ISC"
+}
