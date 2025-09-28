@@ -1,0 +1,86 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: charityevents_db
+          MYSQL_USER: charityevents_user
+          MYSQL_PASSWORD: charityevents_password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: api/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./api
+      run: npm ci
+    
+    - name: Run tests
+      working-directory: ./api
+      run: npm test
+      env:
+        DB_HOST: localhost
+        DB_USER: charityevents_user
+        DB_PASSWORD: charityevents_password
+        DB_NAME: charityevents_db
+        NODE_ENV: test
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build Docker image
+      run: |
+        cd docker
+        docker-compose build api
+    
+    - name: Test Docker container
+      run: |
+        cd docker
+        docker-compose up -d mysql
+        sleep 30
+        docker-compose up -d api
+        sleep 10
+        curl -f http://localhost:3000/api/events || exit 1
+        docker-compose down
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [test, build]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Deploy to production
+      run: |
+        echo "Deployment steps would go here"
+        echo "This could include deploying to cloud providers like AWS, Azure, or GCP"
