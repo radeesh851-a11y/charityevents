@@ -79,17 +79,18 @@ async function searchEvents(req, res, next) {
     let where = `WHERE e.status = 'active'`;
     const whereParams = [];
 
-    if (date && date.trim()) {
+    // Safe parameter handling with type checking
+    if (date && typeof date === 'string' && date.trim()) {
       where += ' AND DATE(e.start_datetime) = ?';
-      whereParams.push(date);
+      whereParams.push(date.trim());
     }
-    if (location && location.trim()) {
+    if (location && typeof location === 'string' && location.trim()) {
       where += ' AND e.location LIKE ?';
-      whereParams.push(`%${location}%`);
+      whereParams.push(`%${location.trim()}%`);
     }
-    if (category && category.trim()) {
+    if (category && typeof category === 'string' && category.trim()) {
       where += ' AND e.category_id = ?';
-      whereParams.push(Number(category));
+      whereParams.push(Number(category.trim()));
     }
 
     // Count query with proper parameters
